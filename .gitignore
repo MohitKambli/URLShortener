@@ -1,0 +1,6 @@
+.vercel
+*.log
+
+# Environments 
+.env 
+env/ 
