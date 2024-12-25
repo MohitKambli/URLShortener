@@ -14,8 +14,12 @@ func (service *URLService) ShortenURL(originalURL string) (models.URL, error) {
 	shortURL := utils.GenerateShortURL()
 	url := models.URL {
 		OriginalURL: originalURL,
-		ShortURL: shortURL
+		ShortURL: shortURL,
 	}
 	err := service.Repo.SaveURL(url)
 	return url, err
+}
+
+func (service *URLService) ExpandURL(shortURL string) (string, error) {
+	return service.Repo.GetOriginalURL(shortURL)
 }

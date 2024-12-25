@@ -15,7 +15,6 @@ func Connect(databaseURL string) (*sql.DB, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	rows, err := db.Query("SELECT version()")
 	if err != nil {
@@ -30,4 +29,5 @@ func Connect(databaseURL string) (*sql.DB, error) {
 		}
 		fmt.Printf("Version: %s\n", result)
 	}
+	return db, nil
 }

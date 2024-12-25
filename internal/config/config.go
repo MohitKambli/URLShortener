@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -11,6 +12,7 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
+	godotenv.Load()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -21,6 +23,6 @@ func LoadConfig() *Config {
 	}
 	return &Config {
 		Port: port,
-		DatabaseURL: databaseURL
+		DatabaseURL: databaseURL,
 	}
 }

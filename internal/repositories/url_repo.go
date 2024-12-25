@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"database/sql"
-	"url-shortener/internal.models"
+	"url-shortener/internal/models"
 )
 
 type URLRepository struct {
@@ -10,7 +10,19 @@ type URLRepository struct {
 }
 
 func (repo *URLRepository) SaveURL(url models.URL) error {
-	_, err := repo.DB.Exec("insert into urls (original_url, short_url) values ($1, $2)", url.OriginalURL, url.ShortURL)
+	// Create the table if it doesn't exist
+	_, err := repo.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS urls (
+			id SERIAL PRIMARY KEY,
+			original_url TEXT NOT NULL,
+			short_url TEXT NOT NULL UNIQUE
+		);
+	`)
+	if err != nil {
+		return err
+	}
+	// Insert the URL record into the table
+	_, err = repo.DB.Exec("INSERT INTO urls (original_url, short_url) VALUES ($1, $2)", url.OriginalURL, url.ShortURL)
 	return err
 }
 
