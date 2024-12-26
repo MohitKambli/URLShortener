@@ -21,7 +21,7 @@ func main() {
 
 	// Set up routes
 	http.HandleFunc("/shorten", handlers.ShortenURLHandler(db))
-	http.HandleFunc("/expand", handlers.ExpandURLHandler(db))
+	http.HandleFunc("/short/", handlers.ExpandURLHandler(db))
 
 	// Start the server
 	log.Printf("Server running on port %s", cfg.Port)
