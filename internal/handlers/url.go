@@ -32,14 +32,11 @@ func ShortenURLHandler(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "Failed to shorten URL", http.StatusInternalServerError)
 			return
 		}
-		// Construct the full short URL
-		baseURL := "http://localhost:8080/short/"
-		fullShortenedURL := baseURL + shortenedURL.ShortURL
 		response := struct {
 			ShortURL string `json:"short_url"`
 			OriginalURL string `json:original_url`
 		}{
-			ShortURL:    fullShortenedURL,
+			ShortURL:    shortenedURL.ShortURL,
 			OriginalURL: shortenedURL.OriginalURL,
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -55,7 +52,7 @@ func ExpandURLHandler(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		shortURL := r.URL.Path[len("/short/"):]
+		shortURL := r.URL.Query().Get("short_url")
 		if shortURL == "" {
 			http.Error(w, "short_url parameter is required", http.StatusBadRequest)
 			return
