@@ -9,7 +9,6 @@ import (
 	"url-shortener/internal/repositories"
 	"url-shortener/internal/services"
 	"github.com/redis/go-redis/v9"
-	"fmt"
 )
 
 func ShortenURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
@@ -71,9 +70,7 @@ func ExpandURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
 		ctx := context.Background()
 		// Check Redis Cache
 		originalURL, err := rdb.Get(ctx, shortURL).Result()
-		if err != redis.Nil {
-			fmt.Println("Found in cache")
-		} else if err == redis.Nil {
+		if err == redis.Nil {
 			// Not found in cache, fetch from database
 			repo := &repositories.URLRepository{DB: db}
 			service := &services.URLService{Repo: repo}
@@ -84,7 +81,6 @@ func ExpandURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
 			}
 			// Cache the result in Redis
 			rdb.Set(ctx, shortURL, originalURL, 24*time.Hour)
-			fmt.Println("Not found in cache")
 		} else if err != nil {
 			http.Error(w, "Failed to fetch URL", http.StatusInternalServerError)
 			return
