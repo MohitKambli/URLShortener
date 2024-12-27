@@ -9,6 +9,10 @@ import (
 type Config struct {
 	Port string
 	DatabaseURL string
+	RedisAddr  string
+	RedisUsername string
+	RedisPassword string
+	RedisDB       int
 }
 
 func LoadConfig() *Config {
@@ -22,7 +26,11 @@ func LoadConfig() *Config {
 		log.Fatal("DATABASE_URL environment variable is required")
 	}
 	return &Config {
-		Port: port,
-		DatabaseURL: databaseURL,
+		Port:          os.Getenv("PORT"),
+		DatabaseURL:   os.Getenv("DATABASE_URL"),
+		RedisAddr:     os.Getenv("REDIS_ADDR"),
+		RedisUsername: os.Getenv("REDIS_USERNAME"),
+		RedisPassword: os.Getenv("REDIS_PASSWORD"),
+		RedisDB:       0,
 	}
 }
