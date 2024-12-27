@@ -7,6 +7,7 @@ import (
 	"url-shortener/internal/database"
 	"url-shortener/internal/handlers"
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -30,10 +31,20 @@ func main() {
 	defer rdb.Close()
 
 	// Set up routes
-	http.HandleFunc("/shorten", handlers.ShortenURLHandler(db, rdb))
-	http.HandleFunc("/short/", handlers.ExpandURLHandler(db, rdb))
+    mux := http.NewServeMux()
+    mux.HandleFunc("/shorten", handlers.ShortenURLHandler(db, rdb))
+    mux.HandleFunc("/short/", handlers.ExpandURLHandler(db, rdb))
 
-	// Start the server
-	log.Printf("Server running on port %s", cfg.Port)
-	log.Fatal(http.ListenAndServe(":" + cfg.Port, nil))
+    // Enable CORS using the library
+    c := cors.New(cors.Options{
+        AllowedOrigins:   []string{"*"}, // Allow all origins
+        AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+        AllowedHeaders:   []string{"Content-Type"},
+        AllowCredentials: true,
+    })
+
+	// Start the server with CORS middleware
+    handler := c.Handler(mux)
+    log.Printf("Server running on port %s", cfg.Port)
+    log.Fatal(http.ListenAndServe(":"+cfg.Port, handler))
 }
