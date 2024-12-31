@@ -62,7 +62,7 @@ func ExpandURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 		// shortURL := r.URL.Query().Get("short_url")
-		shortURL := r.URL.Path[len("/short/"):]
+		shortURL := r.URL.Path[len("/redirect/"):]
 		if shortURL == "" {
 			http.Error(w, "short_url parameter is required", http.StatusBadRequest)
 			return
