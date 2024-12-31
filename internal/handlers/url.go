@@ -40,7 +40,7 @@ func ShortenURLHandler(db *sql.DB, rdb *redis.Client, koyeb_url string) http.Han
 		ctx := context.Background()
 		rdb.Set(ctx, shortenedURL.ShortURL, shortenedURL.OriginalURL, 2*time.Hour)
 
-		fullShortURL := koyeb_url + "/short/" + shortenedURL.ShortURL
+		fullShortURL := koyeb_url + "/redirect/" + shortenedURL.ShortURL
 		response := struct {
 			ShortURL string `json:"short_url"`
 			OriginalURL string `json:original_url`
