@@ -13,6 +13,7 @@ type Config struct {
 	RedisUsername string
 	RedisPassword string
 	RedisDB       int
+	KoyebURL string
 }
 
 func LoadConfig() *Config {
@@ -28,6 +29,7 @@ func LoadConfig() *Config {
 	return &Config {
 		Port:          os.Getenv("PORT"),
 		DatabaseURL:   os.Getenv("DATABASE_URL"),
+		KoyebURL:	   os.Getenv("KOYEB_URL"),
 		RedisAddr:     os.Getenv("REDIS_ADDR"),
 		RedisUsername: os.Getenv("REDIS_USERNAME"),
 		RedisPassword: os.Getenv("REDIS_PASSWORD"),
