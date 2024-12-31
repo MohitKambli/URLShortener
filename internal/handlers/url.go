@@ -11,7 +11,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func ShortenURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
+func ShortenURLHandler(db *sql.DB, rdb *redis.Client, koyeb_url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -40,7 +40,7 @@ func ShortenURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
 		ctx := context.Background()
 		rdb.Set(ctx, shortenedURL.ShortURL, shortenedURL.OriginalURL, 2*time.Hour)
 
-		fullShortURL := "http://localhost:4000/short/" + shortenedURL.ShortURL
+		fullShortURL := koyeb_url + "/short/" + shortenedURL.ShortURL
 		response := struct {
 			ShortURL string `json:"short_url"`
 			OriginalURL string `json:original_url`
