@@ -32,7 +32,7 @@ func main() {
 
 	// Set up routes
     mux := http.NewServeMux()
-    mux.HandleFunc("/shorten", handlers.ShortenURLHandler(db, rdb, cfg.KoyebURL))
+    mux.HandleFunc("/shorten", handlers.ShortenURLHandler(db, rdb))
     mux.HandleFunc("/redirect/", handlers.ExpandURLHandler(db, rdb))
 
     // Enable CORS using the library
