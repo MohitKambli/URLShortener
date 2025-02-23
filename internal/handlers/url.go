@@ -84,7 +84,7 @@ func ExpandURLHandler(db *sql.DB, rdb *redis.Client) http.HandlerFunc {
 			rdb.Set(ctx, shortURL, originalURL, 24*time.Hour)
 		} else if err != nil {
 			http.Error(w, "Failed to fetch URL", http.StatusInternalServerError)
-			fmt.Println("Error: ", e)
+			fmt.Println("Error: ", err)
 			return
 		}
 		http.Redirect(w, r, originalURL, http.StatusFound)
